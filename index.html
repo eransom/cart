@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://use.fontawesome.com/8e44cfaa10.js"></script>
+    <title>Shopping Cart</title>
+  </head>
+  <body>
+
+    <div id="cart">
+      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+      <h3>Shopping Cart</h3>
+      <hr>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+    <script id="entry-template" type="text/x-handlebars-template">
+      <div class="entry">
+        <img src="{{pic}}" height="100px" width="100px"/>
+        <h5>{{title}}</h5>
+        <p class="body">{{body}}</p>
+        <div class="remove">
+          <input type="button" value="{{button}}">
+        </div>
+      </div>
+    </script>
+    <script>
+
+      var source   = $("#entry-template").html();
+      var template = Handlebars.compile(source);
+
+      var food = [
+        {pic: "http://i.huffpost.com/gen/1008170/images/o-BUTTERBALL-ANIMAL-CRUELTY-facebook.jpg",
+         title: "Butterball Premium Turkey", body: "$50.00", button: "X"},
+        {pic: "http://www.thenumber1.com/Files/84cc0124-1389-4285-9825-6efc837725dd.jpg",
+         title: "Red Apples", body: "$6.23/lb", button: "X"},
+        {pic: "https://images-na.ssl-images-amazon.com/images/I/51NcpAFVZsL.jpg",
+         title: "Coke - 12 Cans", body: "$4.68", button: "X"},
+        {pic: "http://media.fooducate.com/blog/posts/All-Natural-Tostitos-1.jpg",
+         title: "Tostitos", body: "$3.30", button: "X"},
+        {pic: "https://s-media-cache-ak0.pinimg.com/originals/f0/61/9d/f0619de670c1c3344dc2bb5c3cc02187.jpg",
+         title: "Oreo Bars", body: "$4.79", button: "X"},
+        {pic: "http://healthylivinghub.net/wp-content/uploads/2014/01/oranges.jpg",
+         title: "Oranges", body: "$3.25/lb", button: "X"},
+        {pic: "http://www.afrugalchick.com/wp-content/uploads/2014/10/cocoa-puffs.jpg",
+         title: "Cocoa Puffs", body: "$2.99", button: "X"},
+        {pic: "http://www.digiorno.com/content/images/Digiorno.jpg",
+         title: "Digiorno", body: "$4.50", button: "X"},
+      ]
+
+      for (var i = 0; i < food.length; i++) {
+          var html = template(food[i]);
+          $('body').append(html)
+        }
+
+        $(function() {
+          $( '.entry' ).draggable({helper:'clone'});
+
+          $('#cart').droppable(
+
+          {
+            accept:".entry",
+            drop: function (ev,ui) {
+              var droppedItem = $(ui.draggable).clone();
+              $(this).append(droppedItem);
+              $('.remove', this).show();
+              $(this, '.remove').on('click', function () {
+                $('.entry', this).remove();
+              });
+            }
+          });
+
+          $(function (remove) {
+            $('.remove').hide();
+          });
+
+        });
+    </script>
+
+  </body>
+</html>
